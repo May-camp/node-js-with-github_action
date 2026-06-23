@@ -8,43 +8,39 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [18.x, 20.x, 22.x]
-
+    defaults:
+      run:
+        working-directory: next-js-app
     steps:
     - uses: actions/checkout@v4
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - name: "Installing Dependencies"
-      run: npm i
-
-    - name: "Build command"
-      run: npm run build
+        cache-dependency-path: 'next-js-app/package-lock.json'
+    - run: npm ci
+    - run: npm run build
 
   unit-tests:
-
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [18.x, 20.x, 22.x]
-
+    defaults:
+      run:
+        working-directory: next-js-app
     steps:
     - uses: actions/checkout@v4
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - name: "Installing Dependencies"
-      run: npm i
-
-    - name: "Running test cases"
-      run: npm run test
+        cache-dependency-path: 'next-js-app/package-lock.json'
+    - run: npm ci
+    - run: npm run test
