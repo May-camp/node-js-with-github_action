@@ -15,7 +15,7 @@ jobs:
       run: docker build -t mayyadanarmaung/next-js-app:latest ./next-js-app
 
     - name: Log in to Docker Hub
-      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+      run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
 
     - name: Push Docker Image
       run: docker push mayyadanarmaung/next-js-app:latest
