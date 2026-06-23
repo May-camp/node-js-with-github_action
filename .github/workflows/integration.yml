@@ -17,12 +17,14 @@ jobs:
         working-directory: next-js-app
     steps:
     - uses: actions/checkout@v4
+    
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-        cache-dependency-path: 'next-js-app/package-lock.json'
+        cache-dependency-path: 'next-js-app/package-lock.json' # Tells GitHub exactly where the lock file is
+        
     - run: npm ci
     - run: npm run build
 
@@ -36,11 +38,13 @@ jobs:
         working-directory: next-js-app
     steps:
     - uses: actions/checkout@v4
+    
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-        cache-dependency-path: 'next-js-app/package-lock.json'
+        cache-dependency-path: 'next-js-app/package-lock.json' # Added here too
+        
     - run: npm ci
     - run: npm run test
