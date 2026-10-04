@@ -11,12 +11,24 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Build Docker Image
-      run: docker build -t mayyadanarmaung/next-js-app:latest ./next-js-app
+    # ၁။ Docker Buildx ကို တပ်ဆင်ခြင်း (Advanced caching အတွက် လိုအပ်ပါတယ်)
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
 
+    # ၂။ Docker Hub သို့ Login ဝင်ခြင်း
     - name: Log in to Docker Hub
-      run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    - name: Push Docker Image
-      run: docker push mayyadanarmaung/next-js-app:latest
-  
+    # ၃။ Docker Image တည်ဆောက်ပြီး Docker Hub ဆီ တင်ခြင်း (Caching စနစ်ပါဝင်သည်)
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: ./next-js-app
+        file: ./next-js-app/Dockerfile
+        push: true
+        tags: mayyadanarmaung/next-js-app:latest
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
